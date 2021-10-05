@@ -90,6 +90,7 @@ class GreedySolver:
                 package = self.packages[id]
 
             if self.does_package_fit_all(package) == False:
+                print("PACKAGE DOES NOT FIT")
                 pass
         return self.placedPackages
 
