@@ -2,6 +2,8 @@
 `git clone https://github.com/Adilius/Considition-2021.git`
 `virtualenv venv`
 `.\venv\Scripts\activate`
+`pip install -r requirements.txt`
+Create an .env file with APIKEY = helloworld
 
 # Python Starterkit Considition 2021
 This is the StarterKit for Considition 2021 which will help you get going as quickly as possible with the competition.
