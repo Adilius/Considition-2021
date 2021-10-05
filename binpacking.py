@@ -14,22 +14,26 @@ class BinPacker:
         self.vehicle_width = game_info["vehicle"]["width"]
         self.vehicle_height = game_info["vehicle"]["height"]
 
-        self.packer.add_bin(Bin('',
-        self.vehicle_length,
-        self.vehicle_width,
-        self.vehicle_height,99999))
+        self.packer.add_bin(Bin(
+        name='',
+        width=self.vehicle_length,
+        height=self.vehicle_height,
+        depth=self.vehicle_width,
+        max_weight=99999))
+
+        print(f'{self.vehicle_length=}  {self.vehicle_width=}  {self.vehicle_height=}')
 
         # Add packages
         self.packages = game_info["dimensions"]
         for package in self.packages:
             self.packer.add_item(Item(
-                package["id"],
-                package['length'],
-                package['width'],
-                package['height'],
-                int(package['id'])))
+                name=package["id"],
+                width=package['width'],
+                height=package['height'],
+                depth=package['length'],
+                weight=int(package['id'])))
 
-        self.packer.pack(bigger_first=True ,distribute_items=False)
+        self.packer.pack(bigger_first=True ,distribute_items=False, number_of_decimals=0)
 
     def Solve(self):
         for b in self.packer.bins:
@@ -41,22 +45,24 @@ class BinPacker:
             for i in range(len(self.packages)):
                     if self.packages[i]["id"] == id:
                         package = self.packages[i]
-            self.AddPackage(package, int(float(item.position[0])), int(float(item.position[1])), int(float(item.position[2])), item.rotation_type)
+            self.AddPackage(package,
+            int(float(item.position[0])),
+            int(float(item.position[1])),
+            int(float(item.position[2])),
+            item.rotation_type)
             print("====> ", item.string())
 
         print("UNFITTED ITEMS:")
         for item in b.unfitted_items:
             print("====> ", item.string())
-
-        print("***************************************************")
-        print("***************************************************")
         return self.placedPackages
         
             
 
 
     def AddPackage(self, package, xp:int, yp:int, zp:int, rot:int):
-        print("adding", package["id"])
+        #print("adding", package["id"])
+        print(f'           {rot=} {xp=}  {yp=}  {zp=}')
 
         if rot == 0:
             # Place it
@@ -87,6 +93,7 @@ class BinPacker:
                 "orderClass": package["orderClass"]
             }
         )
+        # Works
         elif rot == 2:
             self.placedPackages.append(
             {
@@ -143,10 +150,10 @@ class BinPacker:
                 "x2": xp, "y2": xp, "z2": xp,
                 "x3": xp, "y3": xp, "z3": xp,
                 "x4": xp, "y4": xp, "z4": xp,
-                "x5": xp + package["length"], "y5": yp + package["width"], "z5": zp + package["height"],
-                "x6": xp + package["length"], "y6": yp + package["width"], "z6": zp + package["height"], 
-                "x7": xp + package["length"], "y7": yp + package["width"], "z7": zp + package["height"], 
-                "x8": xp + package["length"], "y8": yp + package["width"], "z8": zp + package["height"],
+                "x5": xp + package["length"], "y5": yp + package["height"], "z5": zp + package["width"],
+                "x6": xp + package["length"], "y6": yp + package["height"], "z6": zp + package["width"], 
+                "x7": xp + package["length"], "y7": yp + package["height"], "z7": zp + package["width"], 
+                "x8": xp + package["length"], "y8": yp + package["height"], "z8": zp + package["width"],
 
                 "weightClass": package["weightClass"],
                 "orderClass": package["orderClass"]
@@ -171,4 +178,4 @@ class BinPacker:
                 "orderClass": package["orderClass"]
             }
         )
-""""
+"""
