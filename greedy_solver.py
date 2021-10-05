@@ -16,7 +16,6 @@ class GreedySolver:
     order_sorted_packages = []
     weight_sorted_packages = []
 
-    otherPackages = []
     placedPackages = []
 
     lastKnownMaxWidth = 0
@@ -61,33 +60,41 @@ class GreedySolver:
         self.weight_sorted_packages = sorted(
             self.weight_sorted_packages, key=lambda i: (i['weight']))
 
-        print("length weight sorted:", len(self.weight_sorted_packages))
-
-        self.light_packages = sorted(
-            self.light_packages, key=lambda i: (i['area']))
-        self.medium_packages = sorted(
-            self.medium_packages, key=lambda i: (i['area']))
-        self.heavy_packages = sorted(
-            self.heavy_packages, key=lambda i: (i['area']))
+        #self.light_packages = sorted(
+        #    self.light_packages, key=lambda i: (i['area']))
+        #self.medium_packages = sorted(
+        #    self.medium_packages, key=lambda i: (i['area']))
+        #self.heavy_packages = sorted(
+        #    self.heavy_packages, key=lambda i: (i['area']))
 
     def Solve(self):
-        for p in self.packages:
+        while len(self.packages) != 0:
             
             # Select a package
-            if self.zp <= self.lastKnownMaxHeight and len(self.weight_sorted_packages) != 0 :
-                id = self.weight_sorted_packages.pop()["id"]
-                package = self.packages[id]
+            #if self.zp <= self.lastKnownMaxHeight and len(self.weight_sorted_packages) != 0 :
+            #    id = self.weight_sorted_packages.pop()["id"]
+            #    package = self.packages[id]
 
-            elif self.zp <= self.lastKnownMaxHeight and len(self.heavy_packages) != 0 :
-                id = self.heavy_packages.pop()["id"]
-                package = self.packages[id]
+            if len(self.heavy_packages) != 0 :
+                id = self.heavy_packages[-1]["id"]
+                for i in range(len(self.packages)):
+                    if self.packages[i]["id"] == id:
+                        package = self.packages[i]
+                        break
 
             elif len(self.medium_packages) != 0 :
-                id = self.medium_packages.pop()["id"]
-                package = self.packages[id]
-            else:
-                id = self.light_packages.pop()["id"]
-                package = self.packages[id]
+                id = self.medium_packages[-1]["id"]
+                for i in range(len(self.packages)):
+                    if self.packages[i]["id"] == id:
+                        package = self.packages[i]
+                        break
+
+            elif len(self.light_packages) != 0:
+                id = self.light_packages[-1]["id"]
+                for i in range(len(self.packages)):
+                    if self.packages[i]["id"] == id:
+                        package = self.packages[i]
+                        break
 
             if self.does_package_fit_all(package) == False:
                 print("PACKAGE DOES NOT FIT")
@@ -130,7 +137,7 @@ class GreedySolver:
             return 
         self.SetMaxX(package)
         self.SetMaxY(package)
-        #self.SetMaxZ(package)
+        self.SetMaxZ(package)
         return 
 
     def DoesPackageFitX(self, package):
@@ -180,5 +187,11 @@ class GreedySolver:
         self.length_sorted_packages[:] = [p for p in self.length_sorted_packages if p.get("id") != package["id"]]
         self.width_sorted_packages[:] = [p for p in self.width_sorted_packages if p.get("id") != package["id"]]
         self.order_sorted_packages[:] = [p for p in self.order_sorted_packages if p.get("id") != package["id"]]
-        #self.weight_sorted_packages[:] = [p for p in self.weight_sorted_packages if p.get("id") != package["id"]]
+        self.weight_sorted_packages[:] = [p for p in self.weight_sorted_packages if p.get("id") != package["id"]]
+
+        self.packages[:] = [p for p in self.packages if p.get("id") != package["id"]]
+
+        self.light_packages[:] = [p for p in self.light_packages if p.get("id") != package["id"]]
+        self.medium_packages[:] = [p for p in self.medium_packages if p.get("id") != package["id"]]
+        self.heavy_packages[:] = [p for p in self.heavy_packages if p.get("id") != package["id"]]
 

@@ -1,4 +1,5 @@
-﻿from greedy_solver import GreedySolver
+from greedy_solver import GreedySolver
+from binpacking import BinPacker
 import api
 import os
 import json
@@ -19,7 +20,7 @@ def main():
 
 	print('Solving game..')
 	greedy = GreedySolver(game_info=response)
-	order = list(range(0,60))
+	#order = list(range(0,60))
 	#solution = greedy.SolveList(order)
 	solution = greedy.Solve()
 
